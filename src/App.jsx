@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 // ── Smooth-scroll helper ──────────────────────────────────────────────────────
 const scrollTo = (id) => {
@@ -175,7 +175,8 @@ function Navbar() {
 
         {/* Resume Button */}
         <a
-          href="/public/Mahammad_Faizal_Resume.pdf"
+          href="/Mahammad_Faizal_Resume.pdf"
+          download
           className="hidden md:flex items-center gap-2 rounded-xl border border-blue-400/40 bg-blue-500/10 px-4 py-2 text-sm font-semibold text-blue-300 transition-all hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/25"
         >
           <span>⬇</span> Download Resume
@@ -185,6 +186,8 @@ function Navbar() {
         <button
           className="md:hidden text-white text-2xl"
           onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={menuOpen}
         >
           {menuOpen ? "✕" : "☰"}
         </button>
@@ -619,8 +622,11 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Replace with your preferred form handler (e.g. Formspree, EmailJS)
-    const mailto = `mailto:mfaizalf72@gmail.com?subject=Portfolio Contact from ${form.name}&body=${encodeURIComponent(form.message)}`;
+    const subject = encodeURIComponent(`Portfolio Contact from ${form.name}`);
+    const body = encodeURIComponent(
+      `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
+    );
+    const mailto = `mailto:mfaizalf72@gmail.com?subject=${subject}&body=${body}`;
     window.location.href = mailto;
     setSent(true);
   };
@@ -701,7 +707,7 @@ function Contact() {
                 </button>
               </div>
             ) : (
-              <div className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
                   <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">Name</label>
                   <input
@@ -709,6 +715,7 @@ function Contact() {
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder="Your full name"
+                    required
                     className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-blue-400/60 focus:outline-none focus:bg-white/8 transition-all"
                   />
                 </div>
@@ -719,6 +726,7 @@ function Contact() {
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     placeholder="your@email.com"
+                    required
                     className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-blue-400/60 focus:outline-none focus:bg-white/8 transition-all"
                   />
                 </div>
@@ -729,16 +737,17 @@ function Contact() {
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Tell me about the opportunity or project..."
+                    required
                     className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-blue-400/60 focus:outline-none focus:bg-white/8 transition-all"
                   />
                 </div>
                 <button
-                  onClick={handleSubmit}
+                  type="submit"
                   className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 py-3 font-semibold text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
                   ✉️ Send Message
                 </button>
-              </div>
+              </form>
             )}
           </GlassCard>
         </div>
